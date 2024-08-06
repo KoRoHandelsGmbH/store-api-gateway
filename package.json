@@ -11,10 +11,11 @@
     "dev": "nitro dev",
     "prepare": "husky && nitro prepare",
     "preview": "node .output/server/index.mjs",
-    "lint": "eslint .",
-    "format": "eslint --fix .",
+    "lint": "eslint server",
+    "format": "eslint --fix server",
     "dependencies:update": "taze -w -u && npm install",
-    "dependencies:check": "taze"
+    "dependencies:check": "taze",
+    "types:check": "tsc --noEmit"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.3.0",
@@ -28,7 +29,10 @@
     "globals": "^15.9.0",
     "husky": "^9.1.4",
     "prettier": "^3.3.3",
-    "taze": "^0.16.3"
+    "taze": "^0.16.3",
+    "turbo": "^2.0.11",
+    "typescript": "^5.5.4",
+    "typescript-eslint": "^8.0.1"
   },
   "dependencies": {
     "nitropack": "^2.9.7"
