@@ -6,6 +6,16 @@ export default defineCachedEventHandler(
 
         try {
             const response = await $fetch(url, requestOptions);
+            setResponseHeader(
+                event,
+                'Vercel-CDN-Cache',
+                `max-age=${60 * 1 * 60}`,
+            );
+            setResponseHeader(
+                event,
+                'CDN-Cache-Control',
+                `max-age=${60 * 1 * 60}`,
+            );
             return response;
         } catch (err) {
             throw createError(err);

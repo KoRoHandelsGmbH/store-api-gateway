@@ -26,7 +26,7 @@ export async function usePrepareRequest(event: H3Event) {
     return {
         url: `${targetUrl}${event.path}`,
         requestOptions: {
-            cache: 'force-cache',
+            cache: 'force-cache' as RequestCache,
             method: event.method,
             body: JSON.stringify(body),
             headers: requestHeaders,
