@@ -1,5 +1,4 @@
 import type { H3Event } from 'h3';
-import { loadConfig } from 'c12';
 
 type SalesChannel = {
     baseURL: string;
@@ -8,9 +7,7 @@ type SalesChannel = {
 };
 
 export async function useSalesChannel(event: H3Event) {
-    const { config } = await loadConfig({
-        name: 'salesChannels',
-    });
+    const config = useRuntimeConfig(event);
 
     const locale = getRouterParam(event, 'locale');
     const channels = config.channels as SalesChannel[];
