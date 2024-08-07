@@ -164,6 +164,16 @@ return response.map((item) => {
 });
 ```
 
+## Helper methods
+
+### `useSalesChannel(event: H3Event)`
+
+The method `useSalesChannel()` is a fundamental part of the stack resolving. It's reading out the runtime config which contains the information about the available sales channels, gets the `sw-access-key` from the request stack and returns the right target url based on the `sw-access-key`.
+
+### `usePrepareRequest(event: H3Event)`
+
+The method `usePrepareRequest()` prepares the request to be send by the proxy. It reads the body and headers of the incoming request, sanitizes the path using `useSanitizedPath()`, provides the correct `sw-access-key` using `useSalesChannel()` as well as the necessary headers and body for the request to be sent to the Store API.
+
 ### Development
 
 You can start the development sever after a successful `npm install` using:
@@ -179,16 +189,6 @@ PORT=9210
 ```
 
 After doing the changes you wanted to do, please commit your changes using a commit message following the [conventional commit guidelines](https://www.conventionalcommits.org/en/v1.0.0/#summary).
-
-## Helper methods
-
-### `useSalesChannel(event: H3Event)`
-
-The method `useSalesChannel()` is a fundamental part of the stack resolving. It's reading out the runtime config which contains the information about the available sales channels, gets the `sw-access-key` from the request stack and returns the right target url based on the `sw-access-key`.
-
-### `usePrepareRequest(event: H3Event)`
-
-The method `usePrepareRequest()` prepares the request to be send by the proxy. It reads the body and headers of the incoming request, sanitizes the path using `useSanitizedPath()`, provides the correct `sw-access-key` using `useSalesChannel()` as well as the necessary headers and body for the request to be sent to the Store API.
 
 ## License
 
