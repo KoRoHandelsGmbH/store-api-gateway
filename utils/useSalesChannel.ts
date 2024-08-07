@@ -1,6 +1,6 @@
 import type { H3Event } from 'h3';
 
-type SalesChannel = {
+type SalesChannelConfig = {
     baseURL: string;
     shopwareAccessToken: string;
     urlLocales: string[];
@@ -11,7 +11,7 @@ export async function useSalesChannel(event: H3Event) {
     const requestAccessKey = getRequestHeader(event, 'sw-access-key');
 
     const locale = getRouterParam(event, 'locale');
-    const channels = config.channels as SalesChannel[];
+    const channels = config.channels as SalesChannelConfig[];
     const isRequestAccessKeyValid = channels.find(({ shopwareAccessToken }) => {
         return requestAccessKey === shopwareAccessToken;
     });

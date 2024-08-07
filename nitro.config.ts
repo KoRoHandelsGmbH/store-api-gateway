@@ -34,12 +34,12 @@ export default defineNitroConfig({
                 urlLocales: ['fi', 'fisv'],
             },
             {
-                baseURL: 'https://www.koro-shop.dk',
+                baseURL: 'https://www.koro.com/dk',
                 shopwareAccessToken: 'SWSCQK9ONZCXYNIZT1JVRVJSSG',
                 urlLocales: ['dk'],
             },
             {
-                baseURL: 'https://www.koro-shop.pt',
+                baseURL: 'https://www.koro.com/pt',
                 shopwareAccessToken: 'SWSCEEZONWLSY0HADK9TZVHDYW',
                 urlLocales: ['pt'],
             },
