@@ -10,7 +10,7 @@
 
 ## Features
 * Resolving sales channel based on request header `sw-access-key`
-* Automatically switching to development enviromentusing `x-env` header
+* Automatically switching to development enviroment using `x-env` header
 * [Nitro' filesystem routing](https://nitro.unjs.io/guide/routing#filesystem-routing) for API routes
 * Conventional Commits support using [`husky`](https://typicode.github.io/husky/) as pre-commit hook
 * Type-safe using Schema definitions from [Shopware Frontends API client](https://www.npmjs.com/package/@shopware/api-client)
