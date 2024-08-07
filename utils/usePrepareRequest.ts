@@ -1,6 +1,5 @@
 import type { H3Event } from 'h3';
 import { useSalesChannel } from '~~/utils/useSalesChannel';
-import { useSanitizedPath } from '~~/utils/useSanitizedPath';
 
 export async function usePrepareRequest(event: H3Event) {
     const body = await readBody(event);
@@ -8,8 +7,7 @@ export async function usePrepareRequest(event: H3Event) {
 
     const requestHeaders = {};
 
-    const { targetUrl, accessToken } = await useSalesChannel(event);
-    const sanitizedPath = useSanitizedPath(event.path);
+    const { targetUrl } = await useSalesChannel(event);
 
     if (
         Object.keys(headers).includes('sw-language-id') &&
@@ -17,10 +15,16 @@ export async function usePrepareRequest(event: H3Event) {
     ) {
         requestHeaders['sw-language-id'] = headers['sw-language-id'];
     }
-    requestHeaders['sw-access-key'] = accessToken;
+
+    if (
+        Object.keys(headers).includes('sw-access-key') &&
+        headers['sw-access-key']
+    ) {
+        requestHeaders['sw-access-key'] = headers['sw-access-key'];
+    }
 
     return {
-        url: `${targetUrl}${sanitizedPath}`,
+        url: `${targetUrl}${event.path}`,
         requestOptions: {
             method: event.method,
             body: JSON.stringify(body),

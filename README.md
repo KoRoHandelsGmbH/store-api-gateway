@@ -9,7 +9,8 @@
 `store-api-proxy` powered by [`Nitropack`](https://nitro.unjs.io/) should be understood as a thin-layer on top of the [Shopware' Store-API](https://shopware.stoplight.io/docs/store-api/38777d33d92dc-quick-start-guide). It provides us with a easy-to-maintain way to leverage Vercel' data cache for caching (and later on transform as well as orchestrate) API responses to overcome the shortcomings of the Store API we're consuming.
 
 ## Features
-* `locale` mapping for convenient sales channel resolving
+* Resolving sales channel based on request header `sw-access-key`
+* Automatically switching to development enviromentusing `x-env` header
 * [Nitro' filesystem routing](https://nitro.unjs.io/guide/routing#filesystem-routing) for API routes
 * Conventional Commits support using [`husky`](https://typicode.github.io/husky/) as pre-commit hook
 * Type-safe using Schema definitions from [Shopware Frontends API client](https://www.npmjs.com/package/@shopware/api-client)
@@ -28,39 +29,7 @@ npm install
 
 The store-api-proxy is providing a thin-layer on top of the Store-API which is getting shipped with each and every sales channels created within our Shopware instance. Depending on the sales channel a different `sw-access-key` request header has to be provided within the incoming request.
 
-The store-api-proxy just provides one domain and therefore we're using a `locale` route parameter which allows the proxy to terminate the right sales channel.
-
-### `locale` mapping
-
-Each and every route needs to contain a `locale` GET parameter. The `locale` internally is mapping to a sales channel. The GET parameter is necessary due to the different sales channels which are having their own `sw-access-key`.
-
-```
-/store-api/product/{id}
-```
-
-becomes
-
-```
-{locale}/store-api/product/{id}
-```
-
-The following `locales` are availables:
-
-- `de`
-- `deen`
-- `fr`
-- `it`
-- `bede`
-- `benl`
-- `befr`
-- `at`
-- `fi`
-- `fisv`
-- `dk`
-- `pt`
-- `es`
-
-Based on the `locale` the proxy is getting the right target url and `sw-access-key`. If an additional `sw-language-id` is getting passed within the request headers it'll respect the header and forwards the request to the Store-API.
+Based on the `sw-access-key` the proxy is getting the right target url. If an additional `sw-language-id` is getting passed within the request headers it'll respect the header and forwards the request to the Store-API.
 
 Routes we would like to be cached are provided as their own API route using a [`defineCachedEventHandler()`](https://nitro.unjs.io/guide/cache#cached-event-handlers). These event handler allowing a second argument for cache control. Usually we want to cache the response in Vercel' data cache for 60 minutes and provide a stale response while invalidating:
 
@@ -72,38 +41,28 @@ Routes we would like to be cached are provided as their own API route using a [`
 }
 ```
 
-## Helper methods
+## Switching between `production` & `development` environment
 
-### `useSalesChannel(event: H3Event)`
-
-The method `useSalesChannel()` is a fundamental part of the stack resolving. It's reading out the runtime config which contains the information about the available sales channels, gets the `sw-access-key` from the request stack and validates if it's one of the sales channel access keys as well as returns the target url and as the correct `sw-access-key` for the selected channel based on the `locale`.
-
-### `useSanitizedPath(path: string)`
-
-The method `useSanitizedPath()` is returning the requested Store-API route and removes the for the proxy necessary route parameter `locale` from the target url.
-
-### `usePrepareRequest(event: H3Event)`
-
-The method `usePrepareRequest()` prepares the request to be send by the proxy. It reads the body and headers of the incoming request, sanitizes the path using `useSanitizedPath()`, provides the correct `sw-access-key` using `useSalesChannel()` as well as the necessary headers and body for the request to be sent to the Store API.
+When the incoming request to the store-api-proxy contains the header `x-env` and the content of the header is either `dev` or `development` we're switching the target url from the production servers to the integrations server.
 
 ## Providing new routes
 
 ### File based routes
 
-We're using [Nitro' filesystem routing](https://nitro.unjs.io/guide/routing#filesystem-routing) for providing additional event handlers for API routes. Each and every route has to be placed into the folder `server/routes/[locale]/store-api` to terminate the right sales channel and `sw-access-key` for the `locale` route parameter.
+We're using [Nitro' filesystem routing](https://nitro.unjs.io/guide/routing#filesystem-routing) for providing additional event handlers for API routes. Each and every route has to be placed into the folder `server/routes/store-api`. The right target url will be terminated based on the `sw-access-key` header of the incoming request.
 
-When the route doesn't contain additional route parameters (e.g. for example `POST /language`, `GET /payment-method`) we simply provide the last part of the URL as the file name.
+When your route doesn't contain additional route parameters (e.g. for example `POST /language`, `GET /payment-method`) we simply provide the last part of the URL as the file name.
 
 ```
-Original url: /store-api/languages
-File path: server/routes/[locale]/store-api/languages.ts
+Original url: /store-api/language
+File path: server/routes/store-api/language.ts
 ```
 
 When we're dealing with routes which are containing additional route parameters (e.g. for example `POST /navigation/{navigationId}/{navigationId}`) we're using a catch-all routes:
 
 ```
 Original url: /store-api/navigation
-File path: server/routes/[locale]/store-api/navigation/[...].ts
+File path: server/routes/store-api/navigation/[...].ts
 ```
 
 ### Providing a new event handler
@@ -220,6 +179,16 @@ PORT=9210
 ```
 
 After doing the changes you wanted to do, please commit your changes using a commit message following the [conventional commit guidelines](https://www.conventionalcommits.org/en/v1.0.0/#summary).
+
+## Helper methods
+
+### `useSalesChannel(event: H3Event)`
+
+The method `useSalesChannel()` is a fundamental part of the stack resolving. It's reading out the runtime config which contains the information about the available sales channels, gets the `sw-access-key` from the request stack and returns the right target url based on the `sw-access-key`.
+
+### `usePrepareRequest(event: H3Event)`
+
+The method `usePrepareRequest()` prepares the request to be send by the proxy. It reads the body and headers of the incoming request, sanitizes the path using `useSanitizedPath()`, provides the correct `sw-access-key` using `useSalesChannel()` as well as the necessary headers and body for the request to be sent to the Store API.
 
 ## License
 
