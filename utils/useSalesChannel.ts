@@ -12,14 +12,13 @@ export async function useSalesChannel(event: H3Event) {
         name: 'salesChannels',
     });
 
+    const locale = getRouterParam(event, 'locale');
+    const channels = config.channels as SalesChannel[];
     const findChannel = (urlLocale: string): SalesChannel => {
         return channels.find(({ urlLocales }) => {
             return urlLocales.includes(urlLocale);
         });
     };
-
-    const locale = getRouterParam(event, 'locale');
-    const channels = config.channels as SalesChannel[];
     const channel = findChannel(locale);
 
     if (!channel) {
