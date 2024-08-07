@@ -6,6 +6,10 @@ export default defineCachedEventHandler(
 
         try {
             const response = await $fetch(url, requestOptions);
+            setResponseHeaders(event, {
+                'vercel-cdn-cache-control': `max-age=${60 * 1 * 60}`,
+                'cdn-cache-control': `max-age=${60 * 1 * 60}`,
+            });
             return response;
         } catch (err) {
             throw createError(err);
