@@ -1,9 +1,15 @@
 import { useSalesChannel } from '~~/utils/useSalesChannel';
+import { useSanitizedPath } from '~~/utils/useSanitizedPath';
 import { proxyRequest } from '#imports';
 
 export default defineEventHandler(async (event) => {
-    const { targetUrl } = await useSalesChannel(event);
+    const { targetUrl, accessToken } = await useSalesChannel(event);
 
-    const sanitizedPath = event.path.slice(3);
-    return await proxyRequest(event, `${targetUrl}${sanitizedPath}`);
+    const sanitizedPath = useSanitizedPath(event.path);
+    return await proxyRequest(event, `${targetUrl}${sanitizedPath}`, {
+        headers: {
+            // Request always with the correct header for the saleschannel
+            'sw-access-key': accessToken as string,
+        },
+    });
 });

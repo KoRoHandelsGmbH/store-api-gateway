@@ -8,18 +8,30 @@ type SalesChannel = {
 
 export async function useSalesChannel(event: H3Event) {
     const config = useRuntimeConfig(event);
+    const requestAccessKey = getRequestHeader(event, 'sw-access-key');
 
     const locale = getRouterParam(event, 'locale');
     const channels = config.channels as SalesChannel[];
-    const findChannel = (urlLocale: string): SalesChannel => {
-        return channels.find(({ urlLocales }) => {
-            return urlLocales.includes(urlLocale);
+    const isRequestAccessKeyValid = channels.find(({ shopwareAccessToken }) => {
+        return requestAccessKey === shopwareAccessToken;
+    });
+
+    if (!isRequestAccessKeyValid) {
+        throw createError({
+            statusCode: 412,
+            statusMessage: 'Precondition Failed',
         });
-    };
-    const channel = findChannel(locale);
+    }
+
+    const channel = channels.find(({ urlLocales }) => {
+        return urlLocales.includes(locale);
+    });
 
     if (!channel) {
-        // TODO: error reporting
+        throw createError({
+            status: 404,
+            statusMessage: 'SalesChannel Not Found',
+        });
     }
 
     const targetUrl = channel.baseURL;
