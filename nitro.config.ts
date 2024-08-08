@@ -1,9 +1,6 @@
 //https://nitro.unjs.io/config
 export default defineNitroConfig({
     srcDir: 'server',
-    storage: {
-        cache: { driver: 'vercelKV' },
-    },
     runtimeConfig: {
         channels: [
             {

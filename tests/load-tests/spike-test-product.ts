@@ -3,8 +3,8 @@ import http from 'k6/http';
 export const options = {
     // Key configurations for spike in this section
     stages: [
-        { duration: '5s', target: 250 }, // fast ramp-up to a high point
-        { duration: '5s', target: 0 }, // quick ramp-down to 0 users
+        { duration: '30s', target: 500 }, // fast ramp-up to a high point
+        { duration: '30s', target: 0 }, // quick ramp-down to 0 users
     ],
 };
 
