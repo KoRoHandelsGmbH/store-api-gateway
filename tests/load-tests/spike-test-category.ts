@@ -13,7 +13,7 @@ export default () => {
             {
                 type: 'equals',
                 field: 'id',
-                value: 'bd4a8d0cbda15eb18735548b920465b2',
+                value: '16c65d351d8e489aacd2ab82c259b4fa',
             },
         ],
     });
@@ -21,7 +21,7 @@ export default () => {
         'Content-Type': 'application/json',
         'sw-access-key': 'SWSCTNNXAGVLUVDQDHNCCVFQQW',
     };
-    http.post('https://api-proxy.koro.com/store-api/product', payload, {
+    http.post('https://api-proxy.koro.com/store-api/category', payload, {
         headers,
     });
 };

@@ -8,20 +8,15 @@ export const options = {
 };
 
 export default () => {
-    const payload = JSON.stringify({
-        filter: [
-            {
-                type: 'equals',
-                field: 'id',
-                value: 'bd4a8d0cbda15eb18735548b920465b2',
-            },
-        ],
-    });
     const headers = {
         'Content-Type': 'application/json',
         'sw-access-key': 'SWSCTNNXAGVLUVDQDHNCCVFQQW',
     };
-    http.post('https://api-proxy.koro.com/store-api/product', payload, {
-        headers,
-    });
+    http.post(
+        'https://api-proxy.koro.com/store-api/navigation/main-navigation/main-navigation',
+        '',
+        {
+            headers,
+        },
+    );
 };
