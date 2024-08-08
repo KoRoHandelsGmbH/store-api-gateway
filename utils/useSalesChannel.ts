@@ -35,7 +35,11 @@ export async function useSalesChannel(event: H3Event) {
     const targetUrl = getTargetUrl(channel);
 
     setResponseHeader(event, 'x-target-url', targetUrl);
-    setResponseHeader(event, 'x-mode', envHeader);
+    setResponseHeader(
+        event,
+        'x-mode',
+        isDevMode ? 'development' : 'production',
+    );
 
     return {
         channel,
