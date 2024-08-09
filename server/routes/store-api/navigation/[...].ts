@@ -10,29 +10,7 @@ export default defineCachedEventHandler(
                 url,
                 requestOptions,
             );
-            return response.map((item) => {
-                item.customFields = {};
-                item.media = undefined;
-                item.description = '';
-
-                if (item.translated) {
-                    item.translated.description = '';
-                }
-
-                item.children = item.children.map((child) => {
-                    child.customFields = {};
-                    child.description = '';
-                    child.media = undefined;
-
-                    if (child.translated) {
-                        child.translated.description = '';
-                    }
-
-                    return child;
-                });
-
-                return item;
-            });
+            return response;
         } catch (err) {
             throw createError(err);
         }
