@@ -33,7 +33,7 @@ export async function usePrepareRequest(event: H3Event) {
         };
     };
 
-    if (event.method.toLowerCase() === 'POST') {
+    if (event.method.toLowerCase() === 'post') {
         requestOptions.body = JSON.stringify(await readBody(event));
     }
 
