@@ -1,4 +1,5 @@
 import { usePrepareRequest } from '~~/utils/usePrepareRequest';
+import { useStoreApiError } from '~~/utils/useStoreApiError';
 
 export default defineCachedEventHandler(
     async (event) => {
@@ -8,7 +9,7 @@ export default defineCachedEventHandler(
             const response = await $fetch(url, requestOptions);
             return response;
         } catch (err) {
-            throw createError(err);
+            throw useStoreApiError(err);
         }
     },
     {

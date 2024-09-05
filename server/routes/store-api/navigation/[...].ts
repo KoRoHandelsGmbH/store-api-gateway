@@ -1,4 +1,5 @@
 import { usePrepareRequest } from '~~/utils/usePrepareRequest';
+import { useStoreApiError } from '~~/utils/useStoreApiError';
 import type { Schemas } from '#shopware';
 
 export default defineCachedEventHandler(
@@ -12,7 +13,7 @@ export default defineCachedEventHandler(
             );
             return response;
         } catch (err) {
-            throw createError(err);
+            throw useStoreApiError(err);
         }
     },
     {
