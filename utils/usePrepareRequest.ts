@@ -1,12 +1,9 @@
-import type { H3Event } from 'h3';
+import type { H3Event, RouterMethod } from 'h3';
 import { useSalesChannel } from '~~/utils/useSalesChannel';
 
 export async function usePrepareRequest(event: H3Event) {
-    const body = await readBody(event);
     const headers = getRequestHeaders(event);
-
     const requestHeaders = {};
-
     const { targetUrl } = await useSalesChannel(event);
 
     if (
@@ -23,13 +20,25 @@ export async function usePrepareRequest(event: H3Event) {
         requestHeaders['sw-access-key'] = headers['sw-access-key'];
     }
 
+    const requestOptions = {
+        cache: 'force-cache' as RequestCache,
+        method: event.method,
+        headers: requestHeaders,
+    } as unknown as {
+        cache: RequestCache;
+        body: string;
+        method: RouterMethod;
+        headers: {
+            [key: string]: string;
+        };
+    };
+
+    if (event.method.toLowerCase() === 'POST') {
+        requestOptions.body = JSON.stringify(await readBody(event));
+    }
+
     return {
         url: `${targetUrl}${event.path}`,
-        requestOptions: {
-            cache: 'force-cache' as RequestCache,
-            method: event.method,
-            body: JSON.stringify(body),
-            headers: requestHeaders,
-        },
+        requestOptions,
     };
 }
