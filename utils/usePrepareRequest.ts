@@ -20,6 +20,13 @@ export async function usePrepareRequest(event: H3Event) {
         requestHeaders['sw-access-key'] = headers['sw-access-key'];
     }
 
+    if (
+        Object.keys(headers).includes('sw-context-token') &&
+        headers['sw-context-token']
+    ) {
+        requestHeaders['sw-context-token'] = headers['sw-context-token'];
+    }
+
     const requestOptions = {
         cache: 'force-cache' as RequestCache,
         method: event.method,
