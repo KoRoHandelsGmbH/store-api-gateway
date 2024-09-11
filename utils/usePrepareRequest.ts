@@ -34,8 +34,6 @@ export async function usePrepareRequest(event: H3Event) {
         requestHeaders['sw-include-seo-urls'] = headers['sw-include-seo-urls'];
     }
 
-    console.log(requestHeaders);
-
     const requestOptions = {
         cache: 'force-cache' as RequestCache,
         method: event.method,
