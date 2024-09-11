@@ -27,6 +27,15 @@ export async function usePrepareRequest(event: H3Event) {
         requestHeaders['sw-context-token'] = headers['sw-context-token'];
     }
 
+    if (
+        Object.keys(headers).includes('sw-include-seo-urls') &&
+        headers['sw-include-seo-urls']
+    ) {
+        requestHeaders['sw-include-seo-urls'] = headers['sw-include-seo-urls'];
+    }
+
+    console.log(requestHeaders);
+
     const requestOptions = {
         cache: 'force-cache' as RequestCache,
         method: event.method,

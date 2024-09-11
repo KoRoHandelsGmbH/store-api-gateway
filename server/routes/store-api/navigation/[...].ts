@@ -19,6 +19,11 @@ export default defineCachedEventHandler(
     {
         maxAge: 60 * 1 * 60,
         swr: true,
-        varies: ['sw-access-key', 'sw-language-id', 'x-env'],
+        varies: [
+            'sw-access-key',
+            'sw-language-id',
+            'x-env',
+            'sw-include-seo-urls',
+        ],
     },
 );
