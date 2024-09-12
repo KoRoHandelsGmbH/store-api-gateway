@@ -2,7 +2,7 @@
 export function useGiftVoucherFilter(item: unknown) {
     if (
         item?.apiAlias === 'product' &&
-        item?.id === '3b6878fb7b9b4504a30d07ffe851cca3'
+        item?.productNumber === 'GIFT_VOUCHER'
     ) {
         // Set 'available' to false if the condition is met
         item.available = false;
