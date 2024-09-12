@@ -1,5 +1,6 @@
 import { usePrepareRequest } from '~~/utils/usePrepareRequest';
 import { useStoreApiError } from '~~/utils/useStoreApiError';
+import { useGiftVoucherFilter } from '~~/utils/useGiftVoucherFilter';
 import type { Schemas } from '#shopware';
 
 export default defineCachedEventHandler(
@@ -11,6 +12,9 @@ export default defineCachedEventHandler(
                 url,
                 requestOptions,
             );
+
+            useGiftVoucherFilter(response);
+
             return response;
         } catch (err) {
             throw useStoreApiError(err);

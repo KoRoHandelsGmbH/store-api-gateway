@@ -5,34 +5,18 @@ export async function usePrepareRequest(event: H3Event) {
     const headers = getRequestHeaders(event);
     const requestHeaders = {};
     const { targetUrl } = await useSalesChannel(event);
+    const passHeaders = [
+        'sw-language-id',
+        'sw-access-key',
+        'sw-context-token',
+        'sw-include-seo-urls',
+    ];
 
-    if (
-        Object.keys(headers).includes('sw-language-id') &&
-        headers['sw-language-id']
-    ) {
-        requestHeaders['sw-language-id'] = headers['sw-language-id'];
-    }
-
-    if (
-        Object.keys(headers).includes('sw-access-key') &&
-        headers['sw-access-key']
-    ) {
-        requestHeaders['sw-access-key'] = headers['sw-access-key'];
-    }
-
-    if (
-        Object.keys(headers).includes('sw-context-token') &&
-        headers['sw-context-token']
-    ) {
-        requestHeaders['sw-context-token'] = headers['sw-context-token'];
-    }
-
-    if (
-        Object.keys(headers).includes('sw-include-seo-urls') &&
-        headers['sw-include-seo-urls']
-    ) {
-        requestHeaders['sw-include-seo-urls'] = headers['sw-include-seo-urls'];
-    }
+    passHeaders.forEach((passHeader) => {
+        if (Object.keys(headers).includes(passHeader) && headers[passHeader]) {
+            requestHeaders[passHeader] = headers[passHeader];
+        }
+    });
 
     const requestOptions = {
         cache: 'force-cache' as RequestCache,
