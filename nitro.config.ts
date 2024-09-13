@@ -3,6 +3,6 @@ export default defineNitroConfig({
     srcDir: 'server',
     runtimeConfig: {
         baseProxyUrl: 'https://www.korodrogerie.de',
-        devProxyUrl: 'http://integrations.koro.software',
+        devProxyUrl: 'https://integrations.koro.software',
     },
 });
