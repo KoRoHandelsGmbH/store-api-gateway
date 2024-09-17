@@ -24,7 +24,7 @@ export async function usePrepareRequest(event: H3Event) {
         headers: requestHeaders,
     } as unknown as {
         cache: RequestCache;
-        body: string;
+        body: string | FormData;
         method: RouterMethod;
         headers: {
             [key: string]: string;
@@ -32,7 +32,26 @@ export async function usePrepareRequest(event: H3Event) {
     };
 
     if (event.method.toLowerCase() === 'post') {
+        const contentType = getRequestHeader(event, 'content-type');
+
         requestOptions.body = JSON.stringify(await readBody(event));
+
+        if (contentType && contentType.startsWith('multipart/form-data')) {
+            const formData = await readMultipartFormData(event);
+
+            console.log(formData);
+
+            const requestFormData = new FormData();
+            formData.forEach(({ name, data, filename, type }) => {
+                if (type && filename) {
+                    requestFormData.append(name, new Blob([data]), filename);
+                } else {
+                    requestFormData.append(name, data);
+                }
+            });
+
+            requestOptions.body = requestFormData;
+        }
     }
 
     return {
