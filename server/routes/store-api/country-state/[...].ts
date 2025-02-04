@@ -16,6 +16,7 @@ export default defineCachedEventHandler(
         maxAge: 60 * 1 * 60,
         swr: true,
         varies: [
+            'user-agent',
             'sw-access-key',
             'sw-language-id',
             'x-env',

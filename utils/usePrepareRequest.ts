@@ -18,6 +18,13 @@ export async function usePrepareRequest(event: H3Event) {
         }
     });
 
+    const userAgent = getRequestHeader(event, 'user-agent');
+    let appMode = 'storefront';
+    if (userAgent.includes('dart:io')) {
+        appMode = 'mobile';
+    }
+    requestHeaders['x-client-origin'] = appMode;
+
     const requestOptions = {
         cache: 'force-cache' as RequestCache,
         method: event.method,
@@ -38,8 +45,6 @@ export async function usePrepareRequest(event: H3Event) {
 
         if (contentType && contentType.startsWith('multipart/form-data')) {
             const formData = await readMultipartFormData(event);
-
-            console.log(formData);
 
             const requestFormData = new FormData();
             formData.forEach(({ name, data, filename, type }) => {
