@@ -1,8 +1,10 @@
-import { useSalesChannel } from '~~/utils/useSalesChannel';
+import { usePrepareRequest } from '~~/utils/usePrepareRequest';
 import { proxyRequest } from '#imports';
 
 export default defineEventHandler(async (event) => {
-    const { targetUrl } = await useSalesChannel(event);
+    const { url, requestOptions } = await usePrepareRequest(event);
 
-    return await proxyRequest(event, `${targetUrl}${event.path}`);
+    return await proxyRequest(event, url, {
+        headers: requestOptions.headers,
+    });
 });
