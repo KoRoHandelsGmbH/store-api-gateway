@@ -21,5 +21,5 @@ jobs:
                   K6_CLOUD_TOKEN: ${{ secrets.K6_CLOUD_TOKEN }}
                   K6_CLOUD_PROJECT_ID: ${{ secrets.K6_CLOUD_PROJECT_ID }}
               with:
-                  path: test/load-tests/**.js
+                  path: tests/load-tests/**.js
                   parallel: true
