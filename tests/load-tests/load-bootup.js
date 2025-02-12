@@ -4,8 +4,8 @@ import { sleep } from 'k6';
 export const options = {
     // Load test for 2 mins with 50 VUs
     stages: [
-        { duration: '1m', target: 50 },
-        { duration: '2m', target: 50 },
+        { duration: '1m', target: 100 },
+        { duration: '5m', target: 100 },
         { duration: '1m', target: 0 },
     ],
 };
