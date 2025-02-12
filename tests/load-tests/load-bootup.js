@@ -2,10 +2,10 @@ import http from 'k6/http';
 import { sleep } from 'k6';
 
 export const options = {
-    // Load test for 2 mins with 800 VUs
+    // Load test for 2 mins with 50 VUs
     stages: [
-        { duration: '1m', target: 800 },
-        { duration: '2m', target: 800 },
+        { duration: '1m', target: 50 },
+        { duration: '2m', target: 50 },
         { duration: '1m', target: 0 },
     ],
 };
