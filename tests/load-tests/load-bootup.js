@@ -6,7 +6,7 @@ import { open } from 'k6/experimental/fs';
 export const options = {
     // Load test for 2 mins with 50 VUs
     stages: [
-        { duration: '1s', target: 1 },
+        { duration: '1m', target: 1 },
         // { duration: '5m', target: 100 },
         // { duration: '1m', target: 0 },
     ],
