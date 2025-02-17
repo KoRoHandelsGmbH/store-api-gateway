@@ -8,7 +8,9 @@ export default defineNitroConfig({
     storage: {
         cache: {
             driver: 'redis',
-            url: 'redis://default:rE5Jz2x6FCAR4NpWQBYz@62.113.228.107:6381/db0',
+            host: '62.113.228.107',
+            port: '6381',
+            password: 'rE5Jz2x6FCAR4NpWQBYz',
         },
     },
 });
