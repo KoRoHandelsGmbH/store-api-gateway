@@ -1,5 +1,5 @@
 import { sleep } from 'k6';
-import { getOptions, getRecords, performTest } from './functions';
+import { getOptions, getRecords, performTest } from './functions.js';
 
 export const options = getOptions;
 

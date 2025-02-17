@@ -67,7 +67,7 @@ export const performTest = (
     baseUrl = undefined,
     headers = {},
 ) => {
-    baseUrl ??= _baseUrl;
+    baseUrl = baseUrl ?? _baseUrl;
     headers = {
         ..._headers,
         ...headers,
