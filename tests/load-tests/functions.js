@@ -62,10 +62,10 @@ export const getRecords = async () => {
 };
 
 export const performTest = (
-    method: string,
-    slug: string,
-    baseUrl?: string,
-    headers: { [p: string]: string } = {},
+    method,
+    slug,
+    baseUrl = undefined,
+    headers = {},
 ) => {
     baseUrl ??= _baseUrl;
     headers = {
