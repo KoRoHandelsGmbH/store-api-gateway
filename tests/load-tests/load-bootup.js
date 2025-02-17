@@ -1,94 +1,12 @@
-import http from 'k6/http';
-import { check, sleep } from 'k6';
-import csv from 'k6/experimental/csv';
-import { open } from 'k6/experimental/fs';
+import { sleep } from 'k6';
+import { getOptions, getRecords, performTest } from './functions';
 
-export const options = {
-    // Load test for 2 mins with 50 VUs
-    stages: [
-        { duration: '5m', target: 1 },
-        // { duration: '5m', target: 100 },
-        // { duration: '1m', target: 0 },
-    ],
-};
+export const options = getOptions;
 
-const baseUrl = 'https://api-proxy.koro.com';
-const headers = {
-    'Content-Type': 'application/json',
-    'sw-access-key': 'SWSCTNNXAGVLUVDQDHNCCVFQQW',
-    'x-vercel-protection-bypass': 'EFc2HoLO2HUIQ4Z3S8PlgfnS8BKHP45Y',
-};
-
-const performTest = (method, slug) => {
-    let res;
-
-    switch (method) {
-        case 'GET':
-            res = http.get(`${baseUrl}${slug}`, {
-                headers,
-            });
-            break;
-        case 'POST':
-            res = http.post(`${baseUrl}${slug}`, undefined, {
-                headers,
-            });
-            break;
-        default:
-            return;
-    }
-
-    // console.log(method, slug);
-    // console.log(res.status);
-    // console.log(res.request.headers);
-    // console.log(res.headers);
-
-    check(res, {
-        [slug]: (r) => r.status === 200,
-    });
-};
-
-const records = await csv.parse(await open('./extract.csv'), {
-    asObjects: true,
-});
-
-const filteredRecords = records.map((record) => {
-    if (record.group.includes('/store-api/checkout')) {
-        return undefined;
-    }
-
-    if (record.group.includes('@proxy.method:GET')) {
-        return {
-            method: 'GET',
-            slug: record.group
-                .split(';')
-                .find((r) => r.startsWith('@proxy.path'))
-                .split(':')[1],
-        };
-    }
-
-    if (
-        record.group.includes('@proxy.method:POST') &&
-        (record.group.includes('/store-api/language') ||
-            record.group.includes('/store-api/product') ||
-            record.group.includes('/store-api/category') ||
-            record.group.includes('/store-api/navigation') ||
-            record.group.includes('/store-api/salutation') ||
-            record.group.includes('/store-api/country') ||
-            record.group.includes('/store-api/seo-url') ||
-            record.group.includes('/store-api/shipping-method'))
-    ) {
-        return {
-            method: 'POST',
-            slug: record.group
-                .split(';')
-                .find((r) => r.startsWith('@proxy.path'))
-                .split(':')[1],
-        };
-    }
-});
+const records = await getRecords();
 
 export default async () => {
-    filteredRecords.forEach((record) => {
+    records.forEach((record) => {
         if (!record) {
             return;
         }
