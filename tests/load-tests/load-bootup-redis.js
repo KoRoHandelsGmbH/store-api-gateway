@@ -12,7 +12,7 @@ export const options = {
 
 export default () => {
     const baseUrl =
-        'store-api-proxy-git-feature-ntrkv-redis-storage-korohandelsgmbh.vercel.app/store-api';
+        'https://store-api-proxy-git-feature-ntrkv-redis-storage-korohandelsgmbh.vercel.app/store-api';
     const headers = {
         'Content-Type': 'application/json',
         'sw-access-key': 'SWSCTNNXAGVLUVDQDHNCCVFQQW',
