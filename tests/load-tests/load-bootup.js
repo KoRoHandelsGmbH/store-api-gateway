@@ -1,5 +1,7 @@
 import http from 'k6/http';
-import { sleep } from 'k6';
+import { check, sleep } from 'k6';
+import csv from 'k6/experimental/csv';
+import { open } from 'k6/experimental/fs';
 
 export const options = {
     // Load test for 2 mins with 50 VUs
@@ -10,7 +12,7 @@ export const options = {
     ],
 };
 
-const baseUrl = 'https://api-proxy.koro.com/store-api/';
+const baseUrl = 'https://api-proxy.koro.com';
 const headers = {
     'Content-Type': 'application/json',
     'sw-access-key': 'SWSCTNNXAGVLUVDQDHNCCVFQQW',
@@ -38,10 +40,30 @@ const performTest = (method, slug) => {
     console.log(res.status);
     console.log(res.request.headers);
     console.log(res.headers);
+
+    check(res, {
+        [slug]: (r) => r.status === 200,
+    });
 };
 
-export default () => {
-    performTest('GET', 'context');
+const records = await csv.parse(await open('./extract.csv'), {
+    asObjects: true,
+});
+
+export default async () => {
+    records.forEach((record) => {
+        if (!record.group.includes('@proxy.method:GET')) {
+            return;
+        }
+
+        performTest(
+            'GET',
+            record.group
+                .split(';')
+                .find((r) => r.startsWith('@proxy.path'))
+                .split(':')[1],
+        );
+    });
 
     // http.post(`${baseUrl}/language`, {
     //     headers,
