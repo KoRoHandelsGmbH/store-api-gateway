@@ -6,7 +6,7 @@ import { open } from 'k6/experimental/fs';
 export const options = {
     // Load test for 2 mins with 50 VUs
     stages: [
-        { duration: '1m', target: 1 },
+        { duration: '5m', target: 1 },
         // { duration: '5m', target: 100 },
         // { duration: '1m', target: 0 },
     ],
@@ -37,10 +37,10 @@ const performTest = (method, slug) => {
             return;
     }
 
-    console.log(method, slug);
-    console.log(res.status);
-    console.log(res.request.headers);
-    console.log(res.headers);
+    // console.log(method, slug);
+    // console.log(res.status);
+    // console.log(res.request.headers);
+    // console.log(res.headers);
 
     check(res, {
         [slug]: (r) => r.status === 200,
@@ -74,7 +74,8 @@ const filteredRecords = records.map((record) => {
             record.group.includes('/store-api/navigation') ||
             record.group.includes('/store-api/salutation') ||
             record.group.includes('/store-api/country') ||
-            record.group.includes('/store-api/seo-url'))
+            record.group.includes('/store-api/seo-url') ||
+            record.group.includes('/store-api/shipping-method'))
     ) {
         return {
             method: 'POST',
