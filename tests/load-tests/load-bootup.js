@@ -5,7 +5,7 @@ export const options = getOptions;
 
 const records = await getRecords();
 
-export default async () => {
+export default () => {
     records.forEach((record) => {
         if (!record) {
             return;
