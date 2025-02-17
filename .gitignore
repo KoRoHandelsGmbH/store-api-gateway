@@ -30,3 +30,6 @@ lerna-debug.log*
 
 # MacOS specific
 .DS_Store
+
+# JetBrains specific
+.idea
