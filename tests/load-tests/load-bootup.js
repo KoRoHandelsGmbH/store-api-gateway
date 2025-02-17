@@ -29,7 +29,7 @@ const performTest = (method, slug) => {
             });
             break;
         case 'POST':
-            res = http.post(`${baseUrl}${slug}`, {
+            res = http.post(`${baseUrl}${slug}`, undefined, {
                 headers,
             });
             break;
