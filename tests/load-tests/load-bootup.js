@@ -37,6 +37,7 @@ const performTest = (method, slug) => {
             return;
     }
 
+    console.log(method, slug);
     console.log(res.status);
     console.log(res.request.headers);
     console.log(res.headers);
@@ -50,19 +51,48 @@ const records = await csv.parse(await open('./extract.csv'), {
     asObjects: true,
 });
 
-export default async () => {
-    records.forEach((record) => {
-        if (!record.group.includes('@proxy.method:GET')) {
-            return;
-        }
+const filteredRecords = records.map((record) => {
+    if (record.group.includes('/store-api/checkout')) {
+        return undefined;
+    }
 
-        performTest(
-            'GET',
-            record.group
+    if (record.group.includes('@proxy.method:GET')) {
+        return {
+            method: 'GET',
+            slug: record.group
                 .split(';')
                 .find((r) => r.startsWith('@proxy.path'))
                 .split(':')[1],
-        );
+        };
+    }
+
+    if (
+        record.group.includes('@proxy.method:POST') &&
+        (record.group.includes('/store-api/language') ||
+            record.group.includes('/store-api/product') ||
+            record.group.includes('/store-api/category') ||
+            record.group.includes('/store-api/navigation') ||
+            record.group.includes('/store-api/salutation') ||
+            record.group.includes('/store-api/country') ||
+            record.group.includes('/store-api/seo-url'))
+    ) {
+        return {
+            method: 'POST',
+            slug: record.group
+                .split(';')
+                .find((r) => r.startsWith('@proxy.path'))
+                .split(':')[1],
+        };
+    }
+});
+
+export default async () => {
+    filteredRecords.forEach((record) => {
+        if (!record) {
+            return;
+        }
+
+        performTest(record.method, record.slug);
     });
 
     // http.post(`${baseUrl}/language`, {
