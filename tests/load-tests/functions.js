@@ -90,10 +90,10 @@ export const performTest = (
             return;
     }
 
-    console.log(method, `${baseUrl}${slug}`);
-    console.log(res.status);
-    console.log(res.request.headers);
-    console.log(res.headers);
+    // console.log(method, `${baseUrl}${slug}`);
+    // console.log(res.status);
+    // console.log(res.request.headers);
+    // console.log(res.headers);
 
     check(res, {
         [slug]: (r) => r.status === 200,
