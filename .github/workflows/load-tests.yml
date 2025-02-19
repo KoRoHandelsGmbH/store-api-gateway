@@ -22,6 +22,5 @@ jobs:
                   K6_CLOUD_TOKEN: ${{ secrets.K6_CLOUD_TOKEN }}
                   K6_CLOUD_PROJECT_ID: ${{ secrets.K6_CLOUD_PROJECT_ID }}
               with:
-                  path: tests/load-tests/load-bootup-bff.js
+                  path: tests/load-tests/load-bootup.js
                   parallel: false
-                  debug: true
