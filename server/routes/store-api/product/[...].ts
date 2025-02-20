@@ -1,30 +1,17 @@
-import { useGiftVoucherFilter } from '~~/utils/useGiftVoucherFilter';
 import { usePrepareRequest } from '~~/utils/usePrepareRequest';
 import { useStoreApiError } from '~~/utils/useStoreApiError';
+import { useGiftVoucherFilter } from '~~/utils/useGiftVoucherFilter';
 
-export default defineCachedEventHandler(
-    async (event) => {
-        const { url, requestOptions } = await usePrepareRequest(event);
+export default defineEventHandler(async (event) => {
+    const { url, requestOptions } = await usePrepareRequest(event);
 
-        try {
-            const response = await $fetch(url, requestOptions);
+    try {
+        const response = await $fetch(url, requestOptions);
 
-            useGiftVoucherFilter(response);
+        useGiftVoucherFilter(response);
 
-            return response;
-        } catch (err) {
-            throw useStoreApiError(err);
-        }
-    },
-    {
-        maxAge: 60 * 1 * 60,
-        swr: true,
-        varies: [
-            'user-agent',
-            'sw-access-key',
-            'sw-language-id',
-            'x-env',
-            'sw-include-seo-urls',
-        ],
-    },
-);
+        return response;
+    } catch (err) {
+        throw useStoreApiError(err);
+    }
+});
